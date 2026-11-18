@@ -1,0 +1,81 @@
+/* ==========================================================================
+   FRAME//SHIFT — Animations & Motion
+   Keyframes, reduced motion overrides, transition utilities
+   ========================================================================== */
+
+/* ---------- KEYFRAMES ---------- */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- SPLIT TEXT BASE ---------- */
+/* Split text spans are populated by JS. Base state hides them below their mask. */
+[data-split] .split-line {
+  display: inline-block;
+  transform: translateY(110%);
+  will-change: transform;
+}
+
+/* ---------- HOVER / ACTIVE STATES (JS-enhanced) ---------- */
+.is-dragging { cursor: grabbing !important; }
+.no-scroll { overflow: hidden !important; }
+
+/* ---------- MODAL ANIMATION HOOKS ---------- */
+/* The modal transition is handled by CSS classes toggled from JS
+   (.modal.is-open), so no additional animation rules are needed here. */
+
+/* ---------- PREFERS-REDUCED-MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain, .vignette { display: none; }
+
+  /* Make sure split text is visible even if JS reveals are disabled */
+  [data-split] .split-line {
+    transform: translateY(0) !important;
+  }
+
+  /* Hero title lines must be visible */
+  .hero__title .line span {
+    transform: translateY(0) !important;
+  }
+
+  /* Parallax video should not scale on reduced motion */
+  .hero__video {
+    transform: scale(1) !important;
+  }
+
+  /* Marquees should still loop but without transition easing distraction */
+  .marquee__track { will-change: auto; }
+
+  /* Cursor hidden on reduced motion */
+  .cursor, .cursor-follower { display: none !important; }
+}
